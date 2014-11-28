@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="css/d3.slider.css" rel="stylesheet" type="text/css" media="screen">
+    <link href="css/nv.d3.css" rel="stylesheet" type="text/css">
+    <link href="css/farm_economy.css" rel="stylesheet" type="text/css" media="screen">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/d3.v3.min.js"></script>
+    <script src="js/d3.slider.js"></script>
+
+    <script src="js/nv.d3.min.js"></script>
+    
+    <script src="js/nvd3/tooltip.js"></script>
+    <script src="js/nvd3/utils.js"></script>
+    <script src="js/nvd3/models/legend.js"></script>
+    <script src="js/nvd3/models/axis.js"></script>
+    <script src="js/nvd3/models/scatter.js"></script>
+    <script src="js/nvd3/models/line.js"></script>
+    <script src="js/nvd3/models/lineWithFocusChart.js"></script>
+    <script src="stream_layers.js"></script>
+
+
+    <!-- HTML5 shim for IE backwards compatibility -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Farm Economy Simulation</title>
+</head>
+
+
+
+
+
+
+<body>
+
+<div class="container">
+    <div class="jumbotron">
+        <div>       
+        <svg id="test1"></svg>
+        </div>
+</div> </div>
+
+<div id="chart" class='with-3d-shadow with-transitions'>
+    <p>This is where the second chart should appear</p>
+    <svg style="height: 500px;"></svg>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" id="header_area">
+            <ul class="nav nav-pills pull-left">
+                <li><a href="#">Varieties</a></li>
+                <li class="active"><a href="#">Marketing/Certification</a></li>
+                <li><a href="#">Processing</a></li>
+                <li><a href="#">Storage/Shipping</a></li>
+                <li><a href="#">Policy/Trade</a></li>    
+            </ul>
+
+            <ul class="nav nav-pills pull-right">
+                <li><a href="#">Run Tests</a></li>
+                <li><a href="#">Save</a></li>
+                <li><a href="#">Load Defaults</a></li>  
+            </ul>            
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6" id="main_area">
+            <div class="row">
+                <div class="col-md-6" id="large_chart_area"><p>Farm economy model test page 7.</p></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2" id="scenario_area1"></div>
+                <div class="col-md-2" id="scenario_area2"></div>
+                <div class="col-md-2" id="state_grid_area"></div>
+            </div>
+        </div>    
+        <div class="col-md-3" id="slider_area">
+                <h2>Default slider</h2>
+                <code>d3.slider()</code>
+                <div id="slider1"></div>
+
+                <h2>Range Slider</h2>
+                <code>d3.slider().value([10, 25 ])</code>
+                <div id="slider2"></div>
+
+                <h2>Range Slider with event, values: <span id="slider3textmin">10</span>, <span id="slider3textmax">25</span></h2>
+                <code>d3.select('#slider3').call(d3.slider().axis(true).value( [ 10, 25 ] ).on("slide", function(evt, value) {<br>
+                &nbsp;&nbsp;d3.select('#slider3textmin').text(value[ 0 ]);<br />
+                &nbsp;&nbsp;d3.select('#slider3textmax').text(value[ 1 ]);<br>
+                })</code>
+                <div id="slider3"></div>
+
+                <h2>Slider with slide event: <span id="slider4text">0</span></h2>
+                <code>d3.slider().on("slide", function(evt, value) {<br>
+                &nbsp;&nbsp;d3.select('#slider3text').text(value);<br>
+                })</code>
+                <div id="slider4"></div>
+
+                <h2>Slider with default axis</h2>
+                <code>d3.slider().axis(true)</code>
+                <div id="slider5"></div>
+
+                <h2>Slider with custom axis</h2>
+                <code>d3.slider().axis( d3.svg.axis().orient("top").ticks(6) )</code>
+                <div id="slider6"></div>
+
+                <h2>Slider with min, max and step values</h2>
+                <code>d3.slider().axis(true).min(2000).max(2100).step(5)</code>
+                <div id="slider7"></div>
+
+                <h2>Vertical slider</h2>
+                <code>d3.slider().value(50).orientation("vertical")</code>
+                <div id="slider8"></div>
+
+                <h2>Vertical range slider</h2>
+                <code>d3.slider().value([10, 45 ]).orientation("vertical")</code>
+                <div id="slider9"></div>
+        </div>
+        <div class="col-md-3" id="description_area">
+            <div id="plt2"></div>
+            <p>1.  First there was god, or gods, or nothing. Then synthesis, space, the expansion, explosions, implosions, particles, objects, combustion, and fusion. 2.  Out of the chaos came order, stars were born and shown and died.<p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" id="footer_area"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+//
+// EXAMPLE D3 SLIDERS
+//
+d3.select('#slider1').call(d3.slider());
+
+d3.select('#slider2').call(d3.slider().value( [ 10, 25 ] ));
+
+d3.select('#slider3').call(d3.slider().axis(true).value( [ 10, 25 ] ).on("slide", function(evt, value) {
+  d3.select('#slider3textmin').text(value[ 0 ]);
+  d3.select('#slider3textmax').text(value[ 1 ]);
+}));
+
+d3.select('#slider4').call(d3.slider().on("slide", function(evt, value) {
+  d3.select('#slider4text').text(value);
+}));
+
+d3.select('#slider5').call(d3.slider().axis(true));
+
+var axis = d3.svg.axis().orient("top").ticks(4);
+d3.select('#slider6').call(d3.slider().axis(axis));
+
+d3.select('#slider7').call(d3.slider().axis(true).min(2000).max(2100).step(5));
+
+d3.select('#slider8').call(d3.slider().value(50).orientation("vertical"));
+
+d3.select('#slider9').call(d3.slider().value( [10, 30] ).orientation("vertical"));
+
+
+//
+// EXAMPLE D3 PLOTS
+//
+
+// Set the dimensions of the canvas / graph
+var margin = {top: 30, right: 20, bottom: 30, left: 50},
+    width = 400 - margin.left - margin.right,
+    height = 220 - margin.top - margin.bottom;
+
+// Parse the date / time
+var parseDate = d3.time.format("%d-%b-%y").parse;
+
+// Set the ranges
+var x = d3.time.scale().range([0, width]);
+var y = d3.scale.linear().range([height, 0]);
+
+// Define the axes
+var xAxis = d3.svg.axis().scale(x)
+    .orient("bottom").ticks(5);
+
+var yAxis = d3.svg.axis().scale(y)
+    .orient("left").ticks(5);
+
+// Define the line
+var valueline = d3.svg.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.close); });
+    
+// Adds the svg canvas
+var chart1 = d3.select("#scenario_area1")
+    .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// Get the data
+d3.csv("data/data1.csv", function(error, data) {
+    data.forEach(function(d) {
+        d.date = parseDate(d.date);
+        d.close = +d.close;
+    });
+
+    // Scale the range of the data
+    x.domain(d3.extent(data, function(d) { return d.date; }));
+    y.domain([0, d3.max(data, function(d) { return d.close; })]);
+
+    // Add the valueline path.
+    chart1.append("path")
+        .attr("class", "line")
+        .attr("d", valueline(data));
+
+    // Add the X Axis
+    chart1.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    // Add the Y Axis
+    chart1.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+});
+
+// Adds the svg canvas
+var chart2 = d3.select("#plt2")
+    .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        
+// Get the data
+d3.csv("data/data2.csv", function(error, data) {
+    data.forEach(function(d) {
+        d.date = parseDate(d.date);
+        d.close = +d.close;
+    });
+
+    // Scale the range of the data
+    x.domain(d3.extent(data, function(d) { return d.date; }));
+    y.domain([0, d3.max(data, function(d) { return d.close; })]);
+
+    // Add the valueline path.
+    chart2.append("path")
+        .attr("class", "line")
+        .attr("d", valueline(data));
+
+    // Add the X Axis
+    chart2.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    // Add the Y Axis
+    chart2.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+});
+
+
+
+
+//
+// EXAMPLE NVD3 PLOTS
+//
+
+//Format A
+nv.addGraph({
+  generate: function() {
+    var width = nv.utils.windowSize().width - 40,
+        height = nv.utils.windowSize().height - 800;
+
+    var chart = nv.models.line()
+                .width(width)
+                .height(height)
+                .margin({top: 20, right: 20, bottom: 20, left: 20})
+
+
+    d3.select('#test1')
+      .attr('width', width)
+      .attr('height', height)
+      .datum(sinAndCos())
+      .call(chart);
+
+    return chart;
+  },
+  callback: function(graph) {
+    window.onresize = function() {
+      var width = nv.utils.windowSize().width - 40,
+          height = nv.utils.windowSize().height - 800,
+          margin = graph.margin();
+
+
+      if (width < margin.left + margin.right + 20)
+        width = margin.left + margin.right + 20;
+
+      if (height < margin.top + margin.bottom + 20)
+        height = margin.top + margin.bottom + 20;
+
+
+      graph
+         .width(width)
+         .height(height);
+
+      d3.select('#test1')
+        .attr('width', width)
+        .attr('height', height)
+        .call(graph);
+    };
+  }
+});
+
+
+
+function sinAndCos() {
+  var sin = [],
+      cos = [];
+
+  for (var i = 0; i < 100; i++) {
+    sin.push({x: i, y: Math.sin(i*i/10)});
+    cos.push({x: i, y: .5 * Math.cos(i/10)});
+  }
+
+  return [
+    {
+      values: sin,
+      key: "Sine Wave",
+      color: "#ff7f0e"
+    },
+    {
+      values: cos,
+      key: "Cosine Wave",
+      color: "#2ca02c"
+    }
+  ];
+}
+
+
+nv.addGraph(function() {
+  var chart = nv.models.lineWithFocusChart();
+
+ // chart.transitionDuration(500);
+  chart.xAxis
+      .tickFormat(d3.format(',f'));
+  chart.x2Axis
+      .tickFormat(d3.format(',f'));
+
+  chart.yAxis
+      .tickFormat(d3.format(',.2f'));
+  chart.y2Axis
+      .tickFormat(d3.format(',.2f'));
+
+  d3.select('#chart svg')
+      .datum(testData())
+      .call(chart);
+
+  nv.utils.windowResize(chart.update);
+
+  return chart;
+});
+
+
+
+function testData() {
+  return stream_layers(3,128,.1).map(function(data, i) {
+    return { 
+      key: 'Stream' + i,
+      values: data
+    };
+  });
+}
+
+
+</script>
+
+
+
+</body>
+</html>
+

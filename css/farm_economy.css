@@ -1,0 +1,39 @@
+body { font: 16
+
+	.nav_pills {
+   -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+   border-radius: 20px;
+}
+
+.container {
+	margin: 100px;	
+	padding: 10px;
+}px Arial;}
+
+path { 
+  stroke: steelblue;
+	stroke-width: 2;
+	fill: none;
+}
+
+.axis path,
+.axis line {
+	fill: none;
+	stroke: grey;
+	stroke-width: 1;
+	shape-rendering: crispEdges;
+}
+
+
+#header_area {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.nav_pills {
+   -webkit-border-radius: 20px;
+   -moz-border-radius: 20px;
+   border-radius: 20px;
+}
+
