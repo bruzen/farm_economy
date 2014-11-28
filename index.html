@@ -7,13 +7,12 @@
     <link href="css/d3.slider.css" rel="stylesheet" type="text/css" media="screen">
     <link href="css/nv.d3.css" rel="stylesheet" type="text/css">
     <link href="css/farm_economy.css" rel="stylesheet" type="text/css" media="screen">
+
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/d3.v3.min.js"></script>
     <script src="js/d3.slider.js"></script>
-
     <script src="js/nv.d3.min.js"></script>
-    
     <script src="js/nvd3/tooltip.js"></script>
     <script src="js/nvd3/utils.js"></script>
     <script src="js/nvd3/models/legend.js"></script>
@@ -31,26 +30,15 @@
     <title>Farm Economy Simulation</title>
 </head>
 
-
-
-
-
-
 <body>
-
 <div class="container">
-    <div class="jumbotron">
-        <div>       
-        <svg id="test1"></svg>
+    <div class="row">
+        <div class="col-md-12" id="title_area">
+          <div id='logo'>
+            <img src="/img/logos-gray.png" />
+          </div>
         </div>
-</div> </div>
-
-<div id="chart" class='with-3d-shadow with-transitions'>
-    <p>This is where the second chart should appear</p>
-    <svg style="height: 500px;"></svg>
-</div>
-
-<div class="container">
+    </div>
     <div class="row">
         <div class="col-md-12" id="header_area">
             <ul class="nav nav-pills pull-left">
@@ -69,96 +57,76 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6" id="main_area">
-            <div class="row">
-                <div class="col-md-6" id="large_chart_area"><p>Farm economy model test page 7.</p></div>
-            </div>
-            <div class="row">
-                <div class="col-md-2" id="scenario_area1"></div>
-                <div class="col-md-2" id="scenario_area2"></div>
-                <div class="col-md-2" id="state_grid_area"></div>
-            </div>
-        </div>    
-        <div class="col-md-3" id="slider_area">
-                <h2>Default slider</h2>
-                <code>d3.slider()</code>
-                <div id="slider1"></div>
-
-                <h2>Range Slider</h2>
-                <code>d3.slider().value([10, 25 ])</code>
-                <div id="slider2"></div>
-
-                <h2>Range Slider with event, values: <span id="slider3textmin">10</span>, <span id="slider3textmax">25</span></h2>
-                <code>d3.select('#slider3').call(d3.slider().axis(true).value( [ 10, 25 ] ).on("slide", function(evt, value) {<br>
-                &nbsp;&nbsp;d3.select('#slider3textmin').text(value[ 0 ]);<br />
-                &nbsp;&nbsp;d3.select('#slider3textmax').text(value[ 1 ]);<br>
-                })</code>
-                <div id="slider3"></div>
-
-                <h2>Slider with slide event: <span id="slider4text">0</span></h2>
-                <code>d3.slider().on("slide", function(evt, value) {<br>
-                &nbsp;&nbsp;d3.select('#slider3text').text(value);<br>
-                })</code>
-                <div id="slider4"></div>
-
-                <h2>Slider with default axis</h2>
-                <code>d3.slider().axis(true)</code>
-                <div id="slider5"></div>
-
-                <h2>Slider with custom axis</h2>
-                <code>d3.slider().axis( d3.svg.axis().orient("top").ticks(6) )</code>
-                <div id="slider6"></div>
-
-                <h2>Slider with min, max and step values</h2>
-                <code>d3.slider().axis(true).min(2000).max(2100).step(5)</code>
-                <div id="slider7"></div>
-
-                <h2>Vertical slider</h2>
-                <code>d3.slider().value(50).orientation("vertical")</code>
-                <div id="slider8"></div>
-
-                <h2>Vertical range slider</h2>
-                <code>d3.slider().value([10, 45 ]).orientation("vertical")</code>
-                <div id="slider9"></div>
+        <div class="col-md-12" id="spacing_area"> 
         </div>
-        <div class="col-md-3" id="description_area">
-            <div id="plt2"></div>
-            <p>1.  First there was god, or gods, or nothing. Then synthesis, space, the expansion, explosions, implosions, particles, objects, combustion, and fusion. 2.  Out of the chaos came order, stars were born and shown and died.<p>
+    </div>   
+    <div class="row">
+        <div class="col-md-7">
+            <div class="row" id="main_area">
+                <div class="col-md-6" id="large_chart_area"></div>
+                    <h3>Revenue, Cost, and Quantity</h3 >
+                    <div id="chart" class='with-3d-shadow with-transitions'>
+                        <svg style="height: 300px;"></svg>
+                    </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6" id="scenario_area1"><h3></br>Labour Price Increase Scenario</h3><div id="test-plt1"></div></div>
+                <div class="col-md-6" id="scenario_area2"><h3></br>Bad Year Scenario</h3> <div id="test-plt2"></div></div>
+            </div>
+
+        </div>    
+        <div class="col-md-2" id="slider_area">
+          <!-- <P>Slider with slide event: <span id="slider4text">0</span></P> -->
+          <p>Premium for local (%)</p>
+          <div id="slider_local_premium"></div>
+          </br>
+
+          <p>Additional premium for organic (%)</p>
+          <div id="slider_organic_premium"></div>
+          </br>
+
+          <P>Mean import price </br>($/18 lb master)</P>
+          <div id="slider_import_price"></div>
+          </br>
+
+        </div>
+        <div class="col-md-" id="description_area">            
+          <p>One proposed intervention is marketing, and building awareness in schools. 
+
+          </br></br>  
+          An effect of both <strong>education/marketing</strong> and <strong>organic certification</strong> is that it becomes possible to capture a premium price. </br></br> If successful this could shift the supply/demand curve and potentially change both the <strong>income</strong> of farmers, and the <strong>resilience</strong> of their operations in bad years.</p>
+          <div id='logo'>
+            <img src="/img/diag.png"/>
+          </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12" id="footer_area"></div>
+        <div class="col-md-12" id="footer_area">
+        </div>
     </div>
 </div>
+
+                        
 
 <script type="text/javascript">
 
 //
 // EXAMPLE D3 SLIDERS
 //
-d3.select('#slider1').call(d3.slider());
 
-d3.select('#slider2').call(d3.slider().value( [ 10, 25 ] ));
+// d3.select('#slider1').call(d3.slider().on("slide", function(evt, value) {
+//   d3.select('#slider4text').text(value);
+// }));
 
-d3.select('#slider3').call(d3.slider().axis(true).value( [ 10, 25 ] ).on("slide", function(evt, value) {
-  d3.select('#slider3textmin').text(value[ 0 ]);
-  d3.select('#slider3textmax').text(value[ 1 ]);
-}));
+d3.select('#slider_local_premium').call(d3.slider().value(8).axis(true));
 
-d3.select('#slider4').call(d3.slider().on("slide", function(evt, value) {
-  d3.select('#slider4text').text(value);
-}));
+d3.select('#slider_organic_premium').call(d3.slider().value(30).axis(true));
 
-d3.select('#slider5').call(d3.slider().axis(true));
+d3.select('#slider_import_price').call(d3.slider().value(16).axis(true));
 
-var axis = d3.svg.axis().orient("top").ticks(4);
-d3.select('#slider6').call(d3.slider().axis(axis));
 
-d3.select('#slider7').call(d3.slider().axis(true).min(2000).max(2100).step(5));
 
-d3.select('#slider8').call(d3.slider().value(50).orientation("vertical"));
 
-d3.select('#slider9').call(d3.slider().value( [10, 30] ).orientation("vertical"));
 
 
 //
@@ -190,10 +158,10 @@ var valueline = d3.svg.line()
     .y(function(d) { return y(d.close); });
     
 // Adds the svg canvas
-var chart1 = d3.select("#scenario_area1")
+var chart1 = d3.select("#test-plt1")
     .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("width", width)
+        .attr("height", height)
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -227,10 +195,10 @@ d3.csv("data/data1.csv", function(error, data) {
 });
 
 // Adds the svg canvas
-var chart2 = d3.select("#plt2")
+var chart2 = d3.select("#test-plt2")
     .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("width", width)
+        .attr("height", height)
     .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
         
@@ -270,7 +238,7 @@ d3.csv("data/data2.csv", function(error, data) {
 // EXAMPLE NVD3 PLOTS
 //
 
-//Format A
+//Format A NOT SHOWING UP NOW ITS MOVED TO THE BOTTOM. REMOVE EX.
 nv.addGraph({
   generate: function() {
     var width = nv.utils.windowSize().width - 40,
@@ -308,7 +276,7 @@ nv.addGraph({
          .width(width)
          .height(height);
 
-      d3.select('#test1')
+      d3.select('#plt1')
         .attr('width', width)
         .attr('height', height)
         .call(graph);
