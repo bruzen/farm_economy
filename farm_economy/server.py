@@ -127,7 +127,10 @@ class Server(swi.SimpleWebInterface):
                            graph_area=graph_area,
                            graph_script=graph_script)
 
-    def swi_run_json(self, model, count=3, **params):
+    def swi_run_json(self, model, count=1, **params):
+        if count == 'undefined':
+            count = 1
+        count = int(count)
         p = {}
         for k, v in params.items():
             if k.startswith('key_'):
@@ -151,6 +154,6 @@ class Server(swi.SimpleWebInterface):
                     line['key'] = 'dummy_%s_%s' % (line['key'], i)
                     extra_plots[j].append(line)
 
-        return json.dumps(dict(main=data, extra_plots=extra_plots))
+        return json.dumps(dict(main=data, extra_plots=extra_plots, count=count))
 
 
