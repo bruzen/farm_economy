@@ -8,11 +8,14 @@ farm_game.model.Model.farm_count = (farm_game.model.Model.farm_width *
                                     farm_game.model.Model.farm_height)
 
 
+import numpy as np
+
 class InterventionButton(GraphBasedModel):
-    def __init__(self, name, xlabel, ylabel, desc):
+    def __init__(self, name, xlabel, ylabel, desc, title):
         super(InterventionButton, self).__init__(name=name, xlabel=xlabel,
             ylabel=ylabel)
         self.desc = desc
+        self.title = title
     def multiplot_pylab(self, plots):
         import pylab
         for i, plot in enumerate(plots):
@@ -36,8 +39,8 @@ class ExampleButton(InterventionButton):
 
     def __init__(self):
         super(ExampleButton, self).__init__(name='Example',
-                xlabel='time', ylabel='amount produced',
-                desc=self.desc)
+                xlabel=['time', 'time'], ylabel=['amount produced', 'nitrogen'],
+                desc=self.desc, title=['Example graph', 'Nitrogen'])
         self.add(Parameter('cert', 0, min=0, max=100,
                            desc='certification subsidy (%)'))
         self.add(Parameter('org', 6.5, min=0, max=20,
@@ -54,7 +57,7 @@ class ExampleButton(InterventionButton):
 
         code = 'init;' + ';'.join(interventions)
 
-        steps = 10   # number of steps to run the simulation for
+        steps = 9   # number of steps to run the simulation for
 
         # run the simulation
         data = farm_game.model.run(seed, code, *(['none'] * steps))
@@ -67,7 +70,12 @@ class ExampleButton(InterventionButton):
                  color='pink', label='Redhaven Organic'),
             ]
 
-        return [plot1]
+        plot2 = [
+            Line(x=range(steps+2), y=-np.array(data['prod_nitrogen']),
+                 color='green', label='nitrogen'),
+            ]
+
+        return [plot1, plot2]
 
 
 if __name__ == '__main__':

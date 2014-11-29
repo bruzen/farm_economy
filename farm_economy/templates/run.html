@@ -74,6 +74,14 @@ function update_result() {
         .datum(data.main)
         .call(chart_main);
     nv.utils.windowResize(chart_main.update);    
+    
+    for (var i in data.extra_plots) {
+        console.log(i, chart_extra);
+        d3.select('#extra-plt' + i + ' svg')
+            .datum(data.extra_plots[i])
+            .call(chart_extra[i]);
+        nv.utils.windowResize(chart_extra[i].update);    
+    }
 }
 
 </script>
@@ -102,17 +110,7 @@ function update_result() {
     </div>   
     <div class="row">
         <div class="col-md-7">
-            <div class="row" id="main_area">
-                <div class="col-md-6" id="large_chart_area"></div>
-                    <h3>Revenue, Cost, and Quantity</h3 >
-                    <div id="chart_main" class='with-3d-shadow with-transitions'>
-                        <svg style="height: 300px;"></svg>
-                    </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6" id="scenario_area1"><h3></br>Labour Price Increase Scenario</h3><div id="test-plt1"></div></div>
-                <div class="col-md-6" id="scenario_area2"><h3></br>Bad Year Scenario</h3> <div id="test-plt2"></div></div>
-            </div>
+            %(graph_area)s
 
         </div>    
         <div class="col-md-2" id="slider_area">
@@ -127,26 +125,7 @@ function update_result() {
 
       
 <script>
-var chart_main;
-nv.addGraph(function() {
-    chart_main = nv.models.lineChart()
-                    .useInteractiveGuideline(true)
-     .options({
-    margin: {left: 100, bottom: 40},
-    showXAxis: true,
-    showYAxis: true,
-    transitionDuration: 250
-  })
-                    
-    chart_main.xAxis     //Chart x-axis settings
-      .axisLabel('%(xlabel)s')
-      .tickFormat(d3.format(',.2f'));                    
-    chart_main.yAxis    
-      .axisLabel('%(ylabel)s')
-      .tickFormat(d3.format(',.2f'));      
-  
-    return chart_main;
-    });
+%(graph_script)s
 
 
 
