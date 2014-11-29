@@ -40,11 +40,26 @@ class Server(swi.SimpleWebInterface):
         sliders = m.html_sliders()
         slider_keys = m.params.keys()
 
+        buttons = [
+            ('Varieties', 'VarietiesButton'),
+            ('Marketing/Certification', 'ExampleButton'),
+            ('Processing', 'ProcessingButton'),
+            ]
+        button_bar = []
+        for text, cls in buttons:
+            button_bar.append('<li%s><a href="/run?model=%s">%s</a></li>' %
+                                (' class="active"' if cls == model else '',
+                                 cls, text))
+
+
+
+
         return html % dict(sliders=sliders, model_name=m.name,
                            model_class=model,
                            xlabel=m.xlabel, ylabel=m.ylabel,
                            slider_keys=slider_keys,
-                           desc=m.desc)
+                           desc=m.desc,
+                           button_bar=''.join(button_bar))
 
     def swi_run_json(self, model, **params):
         p = {}

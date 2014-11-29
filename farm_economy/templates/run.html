@@ -88,17 +88,11 @@ function update_result() {
     <div class="row">
         <div class="col-md-12" id="header_area">
             <ul class="nav nav-pills pull-left">
-                <li><a href="#">Varieties</a></li>
-                <li class="active"><a href="#">Marketing/Certification</a></li>
-                <li><a href="#">Processing</a></li>
-                <li><a href="#">Storage/Shipping</a></li>
-                <li><a href="#">Policy/Trade</a></li>    
+                %(button_bar)s
             </ul>
 
             <ul class="nav nav-pills pull-right">
-                <li><a href="#">Run Tests</a></li>
-                <li><a href="#">Save</a></li>
-                <li><a href="#">Load Defaults</a></li>  
+                <li><a href="/run?model=%(model_class)s">Load Defaults</a></li>  
             </ul>            
         </div>
     </div>

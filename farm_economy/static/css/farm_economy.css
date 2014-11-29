@@ -23,11 +23,6 @@ h3 {
 .container {
 }
 
-path { 
-  stroke: steelblue;
-	stroke-width: 2;
-	fill: none;
-}
 
 .axis path,
 .axis line {
