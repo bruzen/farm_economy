@@ -24,7 +24,7 @@ setup(
     packages=find_packages(),
     entry_points={
         'console_scripts': [
-            'farm_econommy = farm_econommy:main',
+            'farm_economy = farm_economy:main',
         ]
     },
     scripts=[],
