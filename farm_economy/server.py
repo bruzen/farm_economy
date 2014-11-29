@@ -127,7 +127,7 @@ class Server(swi.SimpleWebInterface):
                            graph_area=graph_area,
                            graph_script=graph_script)
 
-    def swi_run_json(self, model, **params):
+    def swi_run_json(self, model, count=3, **params):
         p = {}
         for k, v in params.items():
             if k.startswith('key_'):
@@ -138,6 +138,18 @@ class Server(swi.SimpleWebInterface):
         r = model.run(seed=1, **p)
         data = model.plot_nvd3(r[0])
         extra_plots = [model.plot_nvd3(rr) for rr in r[1:]]
+
+        for i in range(count-1):
+            r = model.run(seed=2 + i, **p)
+            d = model.plot_nvd3(r[0])
+            for line in d:
+                line['key'] = 'dummy_%s_%s' % (line['key'], i)
+                data.append(line)
+            for j, rr in enumerate(r[1:]):
+                e = model.plot_nvd3(rr)
+                for line in e:
+                    line['key'] = 'dummy_%s_%s' % (line['key'], i)
+                    extra_plots[j].append(line)
 
         return json.dumps(dict(main=data, extra_plots=extra_plots))
 

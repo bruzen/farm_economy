@@ -90,6 +90,7 @@ window.nv.tooltip.* also has various helper methods.
                 .enter()
                 .append("tr")
                 .classed("highlight", function(p) { return p.highlight})
+                .classed('hidden', function(p) { return p.key.substring(0,6)=='dummy_';})
                 ;
 
             trowEnter.append("td")
