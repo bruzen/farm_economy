@@ -34,7 +34,8 @@ class InterventionButton(GraphBasedModel):
 
 class VarietiesButton(InterventionButton):
     desc = '''VarietiesButton text. Here is some <em>html</em> that describes the model.
-    This will be displayed on the web page.'''
+    This will be displayed on the web page. When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
+$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$'''
 
     def __init__(self):
         super(VarietiesButton, self).__init__(name='Varieties',
