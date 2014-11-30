@@ -1,0 +1,51 @@
+
+\documentclass[11pt]{article}
+
+\usepackage{ifpdf}
+\ifpdf 
+    \usepackage[pdftex]{graphicx}   % to include graphics
+    \pdfcompresslevel=9 
+    \usepackage[pdftex,     % sets up hyperref to use pdftex driver
+            plainpages=false,   % allows page i and 1 to exist in the same document
+            breaklinks=true,    % link texts can be broken at the end of line
+            colorlinks=true,
+            pdftitle=My Document
+            pdfauthor=My Good Self
+           ]{hyperref} 
+    \usepackage{thumbpdf}
+\else 
+    \usepackage{graphicx}       % to include graphics
+    \usepackage{hyperref}       % to simplify the use of \href
+\fi 
+
+\title{Supply Demand Diagram With Local and International Supply}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\section{Slider Values}
+
+
+We'd want sliders for $a,\ b,\ d,\ \gamma,\ and\ p^e$
+ controlling the choke prices $a$ and the slope of the demand function $b$, the market power of local peaches $d$, timing of other fruit through $\gamma$ and the import price, which might be complex expectation, or a certain value.
+
+We'd use these on the python side to compute the optimal
+ $\bar p$ is the price fixed by the marketing board, and the revenue scenario this gives..
+ 
+
+Details
+
+\begin{enumerate}
+\item $p^e$ is the price that the board expects imported peaches will sell for this week. (They may have the exact value. there is some room to consider the effect of guessing ) 
+
+\item $\gamma$ is a shift parameter. - increasing $\gamma$ increases the slope of the basic supply demand  over the base slope (it is a multiplier for slope)
+
+\item $a$ is the choke price above this price
+
+\item $b$ is the basic slope of the demand curve   
+\end{enumerate}
+
+
+
+\end{document}  
