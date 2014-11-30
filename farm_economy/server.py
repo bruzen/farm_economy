@@ -67,6 +67,7 @@ class Server(swi.SimpleWebInterface):
         buttons = [
             ('Varieties', 'VarietiesButton'),
             ('Marketing/Certification ExampleButton1', 'ExampleButton'),
+            ('Example with demand', 'ExampleButton2'),
             ('Processing', 'ProcessingButton'),
             ('ExampleButton2', 'ExampleButton2'),
             ('ExampleButton3', 'ExampleButton3'),

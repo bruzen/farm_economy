@@ -19,7 +19,7 @@ class InterventionButton(GraphBasedModel):
     def multiplot_pylab(self, plots):
         import pylab
         for i, plot in enumerate(plots):
-            pylab.subplot(i+1, 1, len(plots))
+            pylab.subplot(len(plots), 1, i + 1)
             for line in plot:
                 pylab.plot(line.x, line.y, color=line.color, label=line.label,
                            linewidth=3)
@@ -142,8 +142,79 @@ class ExampleButton(InterventionButton):
 
         return [plot1, plot2]
 
+class ExampleButton2(InterventionButton):
+    desc = '''Here is a more complex example with a controllable supply/
+    demeand curve.'''
+
+    def __init__(self):
+        super(ExampleButton2, self).__init__(name='Example',
+                xlabel=['time', 'amount produced'],
+                ylabel=['amount produced', 'price ($)'],
+                desc=self.desc, title=['Example graph',
+                                       'Supply / Demand curve for organics'])
+        self.add(Parameter('cert', 0, min=0, max=100,
+                           desc='certification subsidy (%)'))
+        self.add(Parameter('p_max', 5, min=0, max=20,
+                           desc='Maximum Price'))
+        self.add(Parameter('p_min', 0, min=0, max=20,
+                           desc='Minimum Price'))
+        self.add(Parameter('slope', 0, min=0, max=100,
+                           desc='Price reduction', decimals=2))
+        self.add(Parameter('quantity', 50, min=0, max=100,
+                           desc='Quantity'))
+
+    def generate_data(self, seed, p):
+        # demand curve was calibrated for 49 farms, so we need to adjust it
+        # to fit the number of farms in this simulation
+        slope = p.slope * 49 / farm_game.model.Model.farm_count
+
+        # turn the sliders into interventions of the same form
+        # as in farm_game/actions.py
+        interventions = [
+            'subsidy:certification,%f' % p.cert,
+            'sd:peachesOrganicRedhaven,%f,%f,%f' % (p.p_max, p.p_min, slope),
+            'sd:peachesOrganicBabyGold,%f,%f,%f' % (p.p_max, p.p_min, slope),
+            ]
+
+        code = 'init;' + ';'.join(interventions)
+
+        steps = 9   # number of steps to run the simulation for
+
+        # run the simulation
+        data = farm_game.model.run(seed, code, *(['none'] * steps))
+
+        # extract plot information from all the data returned from the model
+        plot1 = [
+            Line(x=range(steps+2), y=data['prod_peachesRedhaven'],
+                 color='red', label='Redhaven'),
+            Line(x=range(steps+2), y=data['prod_peachesOrganicRedhaven'],
+                 color='pink', label='Redhaven Organic'),
+            Line(x=range(steps+2), y=data['prod_peachesBabyGold'],
+                 color='yellow', label='BabyGold'),
+            Line(x=range(steps+2), y=data['prod_peachesOrganicBabyGold'],
+                 color='gold', label='BabyGold Organic'),
+            ]
+
+        # now generate the plot data for the supply/demand curve
+        steps = 200
+        qq = np.linspace(0, 100, steps)
+
+        price = -slope * p.p_max * 0.001 * qq + p.p_max
+        price = np.maximum(price, p.p_min)
+
+        target_price = -slope * p.p_max * 0.001 * p.quantity + p.p_max
+        target_price = np.maximum(target_price, p.p_min)
+
+        plot2 = [
+            Line(qq, price, color='green', label='demand'),
+            Line([0, p.quantity], [target_price, target_price], color='blue', label='price'),
+            Line([p.quantity, p.quantity], [0, target_price], color='red', label='quantity'),
+            ]
+
+        return [plot1, plot2]
+
 
 if __name__ == '__main__':
-    b = ExampleButton()
-    plots = b.run(seed=1, cert=100, org=7)
+    b = ExampleButton2()
+    plots = b.run(seed=1, cert=100)
     b.multiplot_pylab(plots)
