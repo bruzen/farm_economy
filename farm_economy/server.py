@@ -66,8 +66,10 @@ class Server(swi.SimpleWebInterface):
 
         buttons = [
             ('Varieties', 'VarietiesButton'),
-            ('Marketing/Certification', 'ExampleButton'),
+            ('Marketing/Certification ExampleButton1', 'ExampleButton'),
             ('Processing', 'ProcessingButton'),
+            ('ExampleButton2', 'ExampleButton2'),
+            ('ExampleButton3', 'ExampleButton3'),
             ]
         button_bar = []
         for text, cls in buttons:

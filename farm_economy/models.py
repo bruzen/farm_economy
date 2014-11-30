@@ -32,9 +32,74 @@ class InterventionButton(GraphBasedModel):
         return r
 
 
+class VarietiesButton(InterventionButton):
+    desc = '''VarietiesButton text. Here is some <em>html</em> that describes the model.
+    This will be displayed on the web page.'''
+
+    def __init__(self):
+        super(VarietiesButton, self).__init__(name='Varieties',
+                xlabel=['time', 'time', 'time', 'something else'], ylabel=['amount produced', 'test_data', 'test2', 'test3'],
+                desc=self.desc, title=['Varieties graph', 'test_data', 'another_test_graph', 'one_more'])
+        self.add(Parameter('cert', 0, min=0, max=100,
+                           desc='Var. certification subsidy (%)'))
+        self.add(Parameter('org', 6.5, min=0, max=20,
+                           desc='Var.price of organics'))
+        self.add(Parameter('qua', 5.5, min=0, max=20,
+                           desc='Try to add quality intervention' ))
+        self.add(Parameter('pri', 4.5, min=0, max=20,
+                           desc='Try to add price slider' ))
+        self.add(Parameter('loc', 3.5, min=0, max=20,
+                           desc='Try to add local slider' ))
+
+    def generate_data(self, seed, p):
+        # turn the sliders into interventions of the same form
+        # as in farm_game/actions.py
+        interventions = [
+            'subsidy:certification,%f' % p.cert,
+            'sd:peachesOrganicRedhaven,%f,0,0' % p.org,
+            'sd:peachesOrganicBabyGold,%f,0,0' % p.org,
+            'price:peachesOrganicRedhaven*%f' %p.pri,
+            'quality: %f,1.0,3.0,2.0' %p.qua,
+            'local: 5.0,%f,10.0' %p.qua,
+            ]
+
+        code = 'init;' + ';'.join(interventions)
+
+        steps = 9   # number of steps to run the simulation for
+
+        # run the simulation
+        data = farm_game.model.run(seed, code, *(['none'] * steps))
+
+        # extract plot information from all the data returned from the model
+        plotVar1 = [
+            Line(x=range(steps+2), y=data['prod_peachesRedhaven'],
+                 color='red', label='Redhaven'),
+            Line(x=range(steps+2), y=data['prod_peachesOrganicRedhaven'],
+                 color='pink', label='Redhaven Organic'),
+            ]
+
+        plotVar2 = [
+            Line(x=range(steps+2), y=-np.array(data['test_data']),
+                 color='green', label='test data'),
+            ]
+
+        plotVar3 = [
+            Line(x=range(steps+2), y=data['prod_peachesRedhaven'],
+                 color='red', label='Redhaven'),
+            Line(x=range(steps+2), y=data['prod_peachesOrganicRedhaven'],
+                 color='pink', label='Redhaven Organic'),
+            ]
+
+        plotVar4 = [
+            Line(x=range(steps+2), y=-np.array(data['prod_nitrogen']),
+                 color='green', label='nitrogen'),
+            ]            
+
+        return [plotVar1, plotVar2, plotVar3, plotVar4]
+
 
 class ExampleButton(InterventionButton):
-    desc = '''Here is some <em>html</em> that describes the model.
+    desc = '''Ex1 Text. Here is some <em>html</em> that describes the model.
     This will be displayed on the web page.'''
 
     def __init__(self):
