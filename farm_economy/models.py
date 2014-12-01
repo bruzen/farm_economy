@@ -76,7 +76,7 @@ class MarketingButton(InterventionButton):
         super(MarketingButton, self).__init__(name='Economy',
                 xlabel=['Quantity', 'Time', 'Time'], #, 'amount produced'],
                 ylabel=['Price', '$', 'Quantity'], # 'price ($)'],
-                desc=self.desc, title=['Supply and Demand','Revenue','Market Share'])
+                desc=self.desc, title=['Supply and Demand'])
         self.add(Parameter('d', 0.33, min=0.01, max=1.5,
                            desc='Market power of local (d)'))
         self.add(Parameter('pe', 15, min=0.01, max=30,
