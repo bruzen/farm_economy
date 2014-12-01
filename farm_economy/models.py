@@ -33,25 +33,62 @@ class InterventionButton(GraphBasedModel):
 
 
 class MarketingButton(InterventionButton):
-    desc = '''What is the market for Ontario peaches? What is the effect of changing sliders?'''
+    desc = '''<h3>Farm Economy</h3>
+
+            What is the effect of changing sliders? What in this graph could each intervention change? What would be the effect?
+            <br> <br>
+            <ul>
+            <li> <strong>Cold storage: </strong> 
+            quality (bruising, ripeness), 
+            waste, 
+            managing supply. 
+
+            <li> <strong> Value-Added Processing: </strong> 
+            managing supply,  
+            new products,  
+            new markets. </li>
+
+            <li> <strong>Approvals process: </strong>
+            new products, 
+            managing supply
+            marketing ON Fruit 
+            food knowledge 
+            competition from imports
+
+            <li> <strong> Educating Youth on Fruit </strong>: 
+            food knowledge.  
+            
+            <li> <strong> Post-harvest handling: </strong> </li>
+            costs of production (labour, scale of industry), 
+            managing supply. 
+
+            <li> <strong> Tax incentives for innovation: </strong></li>
+            production costs (labor),
+            new products, 
+            quality (bruising, ripeness), 
+            waste. </li>
+            </ul>
+
+
+    '''
 
     def __init__(self):
         super(MarketingButton, self).__init__(name='Economy',
-                xlabel=['Time', 'amount produced'],
-                ylabel=['Quantity', 'price ($)'],
-                desc=self.desc, title=['A Supply Demand Curve'])
-        self.add(Parameter('a', 30, min=0.01, max=50,
-                           desc='Choke price, $/18lb unit (a)'))
-        self.add(Parameter('b', 8, min=0.01, max=1000,
-                           desc='Slope of demand curve (b)'))
+                xlabel=['Quantity', 'Time', 'Time'], #, 'amount produced'],
+                ylabel=['Price', '$', 'Quantity'], # 'price ($)'],
+                desc=self.desc, title=['Supply and Demand','Revenue','Market Share'])
         self.add(Parameter('d', 0.33, min=0.01, max=1.5,
                            desc='Market power of local (d)'))
         self.add(Parameter('pe', 15, min=0.01, max=30,
-                           desc='Mean expected import price, $/18lb unit (pe)'))
+                           desc='Mean expected import price ($/18lb unit)'))
         self.add(Parameter('plocal', 17, min=0.01, max=30,
-                           desc='Price chosen by the marketing board, $/18lb unit (pe)'))
+                           desc='Price chosen by the marketing board ($/18lb unit'))
+        self.add(Parameter('a', 30, min=20, max=50,
+                           desc='Choke price, $/18lb unit (a)'))
+        self.add(Parameter('b', 8, min=15, max=1000,
+                           desc='Steepness of demand curve (b)'))        
         self.add(Parameter('ga', 1, min=0.01, max=5,
-                           desc='Competition (gamma)'))        
+                           desc='Curve  '))        
 
     def generate_data(self, seed, p):
         # # TODO: Fix so it is the right slope the actually use..
@@ -101,23 +138,62 @@ class MarketingButton(InterventionButton):
 
         d_intercept = p.pe + p.d*(p.a - p.pe)
 
+
+        # Main Quantities:
+
+
+
+        # p_imports = p.pe 
+        # q_imports = (p.a - p.pe)/p.b
+        # import_market_size = p_imports * q_imports
+
+        # a_local = p.d*(p.a - p.pe) + p.pe       # ok
+        # b_local = p.d*(p.a - p.pe)/q_imports    # ok
+        
+        # p_local = p.plocal
+        # q_local = (a_local + p.plocal)/p.b # (p.a - p.plocal)/p.b
+
+        # local_pq_intercept = np.abs((p.pe - a_local)/(b_local)) # NOPE!
+        #local_pq_intercept = np.abs((d_intercept - p.plocal)/b_local)
+
+
+        # plot1 = [
+        #     Line([0, p.a/p.b], [p.a,0], color='gray', label='Overall Demand Curve for Peaches'),
+        #     Line([0,(p.a - p.pe)/p.b], [p.pe, p.pe], color='blue', label='Import Price'),
+        #     Line([q_imports,q_imports], [0, p.pe], color='blue',label=''),
+        #     Line([0,(p.a - p.pe)/p.b], [d_intercept, p.pe], color='red', label='Local Demand'),
+        #     #Line([0,local_pq_intercept], [p.plocal, p.plocal], color='green', label='Marketing Board\'s Price'),
+        #     Line([(p.a - p.plocal)/p.b,(p.a - p.plocal)/p.b], [0, p.plocal], color='gray', label=''),
+        #     # Line([0,0], [0, 35], color='gray', label=''),
+        #     # Line([0,5], [0, 0], color='gray', label=''),
+        #     ]
+
+        # Backup sliders
         plot1 = [
-            Line([0, p.a/p.b], [p.a,0], color='gray', label='Overall Demand Curve'),
+            Line([0, p.a/p.b], [p.a,0], color='gray', label='Overall Demand Curve for Peaches'),
             Line([0,(p.a - p.pe)/p.b], [p.pe, p.pe], color='blue', label='Expected California Price'),
             Line([(p.a - p.pe)/p.b,(p.a - p.pe)/p.b], [0, p.pe], color='blue',label=''),
-            Line([0,(p.a - p.pe)/p.b], [d_intercept, p.pe], color='red', label='Local Demand Curve'),
+            Line([0,(p.a - p.pe)/p.b], [d_intercept, p.pe], color='red', label='Conditional Local Demand'),
             Line([0,(p.a - p.plocal)/p.b], [p.plocal, p.plocal], color='green', label='Marketing Board\'s Price'),
             Line([(p.a - p.plocal)/p.b,(p.a - p.plocal)/p.b], [0, p.plocal], color='gray', label=''),
-            ]
+        ]    
+
+        # Local volume, local quantity, local revenue
+        # Import volume, import revenue, 
 
         # TODO FIX
         # plot1 = plot2
 
+        plot_revenue = [
+            Line([0, p.a/p.b], [p.a,0], color='gray', label='Overall Demand Curve'),
+        ]
 
+        # Plot quantities as a share/%
+        plot_quantities = [
+            Line([0, p.a/p.b], [p.a,0], color='gray', label='Overall Demand Curve'),
+        ]
 
-
-
-        return [plot1] #, plot2]
+        return [plot1, plot_revenue, plot_quantities] #, plot2]
 
 
 class CertificationButton(InterventionButton):
@@ -367,25 +443,25 @@ class CertificationButton2(InterventionButton):
 
         return [plot1, plot2]
 
-class ScenariosButton(InterventionButton):
-    desc = '''VarietiesButton text. Here is some <em>html</em> that describes the model.
-    This will be displayed on the web page. When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
-    $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$'''
+class OtherButton(InterventionButton):
+    desc = ''' ''' # VarietiesButton text. Here is some <em>html</em> that describes the model.
+    #This will be displayed on the web page. When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
+    #$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$'''
 
     def __init__(self):
-        super(ScenariosButton, self).__init__(name='Varieties',
-                xlabel=['time', 'time', 'time', 'something else'], ylabel=['amount produced', 'test_data', 'test2', 'test3'],
-                desc=self.desc, title=['Varieties graph', 'test_data', 'another_test_graph', 'one_more'])
+        super(OtherButton, self).__init__(name='Varieties',
+                xlabel=['time', 'time', 'time'], ylabel=['amount produced', 'test_data', 'test2'],
+                desc=self.desc, title=['Varieties graph', 'Inputs', 'Nitrogen'])
         self.add(Parameter('cert', 0, min=0, max=100,
                            desc='Var. certification subsidy (%)'))
         self.add(Parameter('org', 6.5, min=0, max=20,
                            desc='Var.price of organics'))
         self.add(Parameter('qua', 5.5, min=0, max=20,
-                           desc='Try to add quality intervention' ))
+                           desc='Quality intervention' ))
         self.add(Parameter('pri', 4.5, min=0, max=20,
-                           desc='Try to add price slider' ))
+                           desc='Price slider' ))
         self.add(Parameter('loc', 3.5, min=0, max=20,
-                           desc='Try to add local slider' ))
+                           desc='Local slider' ))
 
     def generate_data(self, seed, p):
         # turn the sliders into interventions of the same form
@@ -431,7 +507,7 @@ class ScenariosButton(InterventionButton):
                  color='green', label='nitrogen'),
             ]            
 
-        return [plotVar1, plotVar2, plotVar3, plotVar4]
+        return [plotVar1, plotVar2, plotVar4]
 
 
 

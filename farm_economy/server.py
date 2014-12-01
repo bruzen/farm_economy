@@ -65,12 +65,12 @@ class Server(swi.SimpleWebInterface):
         slider_keys = m.params.keys()
 
         buttons = [
-            ('Marketing', 'MarketingButton'),
-            ('Certification', 'CertificationButton'),
-            ('Varieties', 'VarietiesButton'),
-            ('Processing', 'MarketingButton'),
-            ('Trade', 'MarketingButton'),
-            ('Scenarios', 'CertificationButton'),
+            ('Supply and Demand', 'MarketingButton'),
+            # ('Certification', 'CertificationButton'),
+            # ('Varieties', 'VarietiesButton'),
+            # ('Processing', 'ProcesingButton'),
+            # ('Trade', 'TradeButton'),
+            ('Other', 'OtherButton'),
             # ('Varieties', 'VarietiesButton'),
             # ('Marketing/Certification ExampleButton1', 'ExampleButton'),
             # ('Example with demand', 'ExampleButton2'),
