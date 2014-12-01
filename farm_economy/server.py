@@ -54,7 +54,7 @@ class Server(swi.SimpleWebInterface):
         return (mimetype, data)
 
     def swi(self):
-        return self.swi_run('ExampleButton')
+        return self.swi_run('VarietiesButton')
 
     def swi_run(self, model):
         m = getattr(farm_economy.models, model)()
@@ -65,12 +65,19 @@ class Server(swi.SimpleWebInterface):
         slider_keys = m.params.keys()
 
         buttons = [
+            ('Model', 'BasicEconomyButton'),
+            ('Marketing', 'MarketingButton'),
+            ('Certification', 'CertificationButton'),
             ('Varieties', 'VarietiesButton'),
-            ('Marketing/Certification ExampleButton1', 'ExampleButton'),
-            ('Example with demand', 'ExampleButton2'),
-            ('Processing', 'ProcessingButton'),
-            ('ExampleButton2', 'ExampleButton2'),
-            ('ExampleButton3', 'ExampleButton3'),
+            ('Processing', 'MarketingButton'),
+            ('Trade', 'MarketingButton'),
+            ('Scenarios', 'CertificationButton'),
+            # ('Varieties', 'VarietiesButton'),
+            # ('Marketing/Certification ExampleButton1', 'ExampleButton'),
+            # ('Example with demand', 'ExampleButton2'),
+            # ('Processing', 'ProcessingButton'),
+            # ('ExampleButton2', 'ExampleButton2'),
+            # ('ExampleButton3', 'ExampleButton3'),
             ]
         button_bar = []
         for text, cls in buttons:
