@@ -32,12 +32,188 @@ class InterventionButton(GraphBasedModel):
         return r
 
 
-class BasicEconomyButton(InterventionButton):
+class MarketingButton(InterventionButton):
+    desc = '''What is the market for Ontario peaches? What is the effect of changing sliders?'''
+
+    def __init__(self):
+        super(MarketingButton, self).__init__(name='Economy',
+                xlabel=['Time', 'amount produced'],
+                ylabel=['Quantity', 'price ($)'],
+                desc=self.desc, title=['A Supply Demand Curve'])
+        self.add(Parameter('a', 30, min=0.01, max=50,
+                           desc='Choke price, $/18lb unit (a)'))
+        self.add(Parameter('b', 8, min=0.01, max=1000,
+                           desc='Slope of demand curve (b)'))
+        self.add(Parameter('d', 0.33, min=0.01, max=1.5,
+                           desc='Market power of local (d)'))
+        self.add(Parameter('pe', 15, min=0.01, max=30,
+                           desc='Mean expected import price, $/18lb unit (pe)'))
+        self.add(Parameter('plocal', 17, min=0.01, max=30,
+                           desc='Price chosen by the marketing board, $/18lb unit (pe)'))
+        self.add(Parameter('ga', 1, min=0.01, max=5,
+                           desc='Competition (gamma)'))        
+
+    def generate_data(self, seed, p):
+        # # TODO: Fix so it is the right slope the actually use..
+        # # demand curve was calibrated for 49 farms, so we need to adjust it
+        # # to fit the number of farms in this simulation
+        # slope = p.b * 49 / farm_game.model.Model.farm_count
+
+        # # turn the sliders into interventions of the same form
+        # # as in farm_game/actions.py
+        # interventions = [
+        #     'subsidy:certification,%f' % p.cert,
+        #     'sd:peachesOrganicRedhaven,%f,%f,%f' % (p.p_max, p.p_min, slope),
+        #     'sd:peachesOrganicBabyGold,%f,%f,%f' % (p.p_max, p.p_min, slope),
+        #     ]
+
+        # code = 'init;' + ';'.join(interventions)
+
+        # steps = 9   # number of steps to run the simulation for
+
+        # # run the simulation
+        # data = farm_game.model.run(seed, code, *(['none'] * steps))
+
+        # # extract plot information from all the data returned from the model
+        # plot1 = [
+        #     Line(x=range(steps+2), y=data['prod_peachesRedhaven'],
+        #          color='red', label='Redhaven'),
+        #     Line(x=range(steps+2), y=data['prod_peachesOrganicRedhaven'],
+        #          color='pink', label='Redhaven Organic'),
+        #     Line(x=range(steps+2), y=data['prod_peachesBabyGold'],
+        #          color='yellow', label='BabyGold'),
+        #     Line(x=range(steps+2), y=data['prod_peachesOrganicBabyGold'],
+        #          color='gold', label='BabyGold Organic'),
+        #     ]
+
+        # now generate the plot data for the supply/demand curve
+        steps = 200
+        qq = np.linspace(0, 2.0, steps)
+
+        pe_line = [p.pe for i in range(0,steps)]
+
+
+        pe_plt = p.pe*np.ones(steps)
+
+        demand_basic = p.a - p.b * qq
+        
+        demand_local = p.pe + p.d * (p.a-p.pe)*qq
+
+        d_intercept = p.pe + p.d*(p.a - p.pe)
+
+        plot1 = [
+            Line([0, p.a/p.b], [p.a,0], color='gray', label='Overall Demand Curve'),
+            Line([0,(p.a - p.pe)/p.b], [p.pe, p.pe], color='blue', label='Expected California Price'),
+            Line([(p.a - p.pe)/p.b,(p.a - p.pe)/p.b], [0, p.pe], color='blue',label=''),
+            Line([0,(p.a - p.pe)/p.b], [d_intercept, p.pe], color='red', label='Local Demand Curve'),
+            Line([0,(p.a - p.plocal)/p.b], [p.plocal, p.plocal], color='green', label='Marketing Board\'s Price'),
+            Line([(p.a - p.plocal)/p.b,(p.a - p.plocal)/p.b], [0, p.plocal], color='gray', label=''),
+            ]
+
+        # TODO FIX
+        # plot1 = plot2
+
+
+
+
+
+        return [plot1] #, plot2]
+
+
+class CertificationButton(InterventionButton):
+    desc = '''What is the market for Ontario peaches? What is the effect of changing sliders?'''
+
+    def __init__(self):
+        super(CertificationButton, self).__init__(name='Economy',
+                xlabel=['Time', 'amount produced'],
+                ylabel=['Quantity', 'price ($)'],
+                desc=self.desc, title=['A Supply Demand Curve'])
+        self.add(Parameter('a', 30, min=0.01, max=50,
+                           desc='Choke price, $/18lb unit (a)'))
+        self.add(Parameter('b', 8, min=0.01, max=1000,
+                           desc='Slope of demand curve (b)'))
+        self.add(Parameter('d', 0.33, min=0.01, max=1.5,
+                           desc='Market power of local (d)'))
+        self.add(Parameter('ga', 1, min=0.01, max=5,
+                           desc='Competition (gamma)'))
+        self.add(Parameter('pe', 15, min=0.01, max=30,
+                           desc='Mean expected import price, $/18lb unit (pe)'))
+        self.add(Parameter('plocal', 17, min=0.01, max=30,
+                           desc='Price chosen by the marketing board, $/18lb unit (pe)'))
+
+    def generate_data(self, seed, p):
+        # # TODO: Fix so it is the right slope the actually use..
+        # # demand curve was calibrated for 49 farms, so we need to adjust it
+        # # to fit the number of farms in this simulation
+        # slope = p.b * 49 / farm_game.model.Model.farm_count
+
+        # # turn the sliders into interventions of the same form
+        # # as in farm_game/actions.py
+        # interventions = [
+        #     'subsidy:certification,%f' % p.cert,
+        #     'sd:peachesOrganicRedhaven,%f,%f,%f' % (p.p_max, p.p_min, slope),
+        #     'sd:peachesOrganicBabyGold,%f,%f,%f' % (p.p_max, p.p_min, slope),
+        #     ]
+
+        # code = 'init;' + ';'.join(interventions)
+
+        # steps = 9   # number of steps to run the simulation for
+
+        # # run the simulation
+        # data = farm_game.model.run(seed, code, *(['none'] * steps))
+
+        # # extract plot information from all the data returned from the model
+        # plot1 = [
+        #     Line(x=range(steps+2), y=data['prod_peachesRedhaven'],
+        #          color='red', label='Redhaven'),
+        #     Line(x=range(steps+2), y=data['prod_peachesOrganicRedhaven'],
+        #          color='pink', label='Redhaven Organic'),
+        #     Line(x=range(steps+2), y=data['prod_peachesBabyGold'],
+        #          color='yellow', label='BabyGold'),
+        #     Line(x=range(steps+2), y=data['prod_peachesOrganicBabyGold'],
+        #          color='gold', label='BabyGold Organic'),
+        #     ]
+
+        # now generate the plot data for the supply/demand curve
+        steps = 200
+        qq = np.linspace(0, 2.0, steps)
+
+        pe_line = [p.pe for i in range(0,steps)]
+
+
+        pe_plt = p.pe*np.ones(steps)
+
+        demand_basic = p.a - p.b * qq
+        
+        demand_local = p.pe + p.d * (p.a-p.pe)*qq
+
+        d_intercept = p.pe + p.d*(p.a - p.pe)
+
+        plot1 = [
+            Line([0, p.a/p.b], [p.a,0], color='gray', label='Overall Demand Curve'),
+            Line([0,(p.a - p.pe)/p.b], [p.pe, p.pe], color='blue', label='Expected California Price'),
+            Line([(p.a - p.pe)/p.b,(p.a - p.pe)/p.b], [0, p.pe], color='blue',label=''),
+            Line([0,(p.a - p.pe)/p.b], [d_intercept, p.pe], color='red', label='Local Demand Curve'),
+            Line([0,(p.a - p.plocal)/p.b], [p.plocal, p.plocal], color='green', label='Marketing Board\'s Price'),
+            Line([(p.a - p.plocal)/p.b,(p.a - p.plocal)/p.b], [0, p.plocal], color='gray', label=''),
+            ]
+
+        # TODO FIX
+        # plot1 = plot2
+
+
+
+
+
+        return [plot1] #, plot2]
+
+
+class VarietiesButton(InterventionButton):
     desc = '''Revising. Here is a more complex example with a controllable supply/
     demeand curve.'''
 
     def __init__(self):
-        super(BasicEconomyButton, self).__init__(name='Example',
+        super(VarietiesButton, self).__init__(name='Example',
                 xlabel=['time', 'amount produced'],
                 ylabel=['amount produced', 'price ($)'],
                 desc=self.desc, title=['Example graph','Supply / Demand curve for organics'])
@@ -112,22 +288,26 @@ class BasicEconomyButton(InterventionButton):
             ]
 
         # TODO FIX
-        plot1 = plot2    
+        plot1 = plot2
+
+
+
+
 
         return [plot1, plot2]
 
-class CertificationButton(InterventionButton):
+class CertificationButton2(InterventionButton):
     desc = '''Revising. Here is a more complex example with a controllable supply/
     demeand curve.'''
 
     def __init__(self):
-        super(CertificationButton, self).__init__(name='Example',
+        super(CertificationButton2, self).__init__(name='Example',
                 xlabel=['time', 'amount produced'],
                 ylabel=['amount produced', 'price ($)'],
                 desc=self.desc, title=['Example graph',
                                        'Supply / Demand curve for organics'])
         self.add(Parameter('cert', 0, min=0, max=100,
-                           desc='certification subsidy (%)'))
+                           desc='Certification subsidy (%)'))
         self.add(Parameter('p_max', 5, min=0, max=20,
                            desc='Maximum Price'))
         self.add(Parameter('p_min', 0, min=0, max=20,
@@ -187,14 +367,13 @@ class CertificationButton(InterventionButton):
 
         return [plot1, plot2]
 
-
-class VarietiesButton(InterventionButton):
+class ScenariosButton(InterventionButton):
     desc = '''VarietiesButton text. Here is some <em>html</em> that describes the model.
     This will be displayed on the web page. When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
-$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$'''
+    $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$'''
 
     def __init__(self):
-        super(VarietiesButton, self).__init__(name='Varieties',
+        super(ScenariosButton, self).__init__(name='Varieties',
                 xlabel=['time', 'time', 'time', 'something else'], ylabel=['amount produced', 'test_data', 'test2', 'test3'],
                 desc=self.desc, title=['Varieties graph', 'test_data', 'another_test_graph', 'one_more'])
         self.add(Parameter('cert', 0, min=0, max=100,

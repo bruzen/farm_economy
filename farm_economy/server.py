@@ -54,7 +54,7 @@ class Server(swi.SimpleWebInterface):
         return (mimetype, data)
 
     def swi(self):
-        return self.swi_run('VarietiesButton')
+        return self.swi_run('MarketingButton')
 
     def swi_run(self, model):
         m = getattr(farm_economy.models, model)()
@@ -65,7 +65,6 @@ class Server(swi.SimpleWebInterface):
         slider_keys = m.params.keys()
 
         buttons = [
-            ('Model', 'BasicEconomyButton'),
             ('Marketing', 'MarketingButton'),
             ('Certification', 'CertificationButton'),
             ('Varieties', 'VarietiesButton'),
